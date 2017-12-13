@@ -1,4 +1,4 @@
-package com.akacrud;
+package com.akacrud.ui.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -19,7 +19,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
+import com.akacrud.R;
+import com.akacrud.ui.fragments.SettingFragment;
 import com.akacrud.ui.fragments.UsersFragment;
 
 public class MainActivity extends AppCompatActivity
@@ -105,28 +108,29 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    /*
+     *   Method that shows the fragments on the container
+     */
     private void displayView(int position) {
         Fragment fragment = null;
         String title = getString(R.string.app_name);
         current_fragment = position;
         switch (position) {
-            case 0:                                 //Inicio
+            case 0:
                 containerBody.setVisibility(View.VISIBLE);
                 fragment = new UsersFragment();
-                //title = getString(R.string.title_fragment_customer);
+                title = getString(R.string.title_fragment_users);
                 break;
-            case 1:                                 //Product
+            case 1:
                 containerBody.setVisibility(View.VISIBLE);
-                fragment = new UsersFragment();
-                //title = getString(R.string.title_fragment_product);
+                fragment = new SettingFragment();
+                title = getString(R.string.title_fragment_settings);
                 break;
-            case 2:                                 // Cerrar sesion
+            case 2:
                 finish();
                 break;
 
             default:
-                // Cerrar sesion
-                // logoutUser();
                 break;
         }
 
@@ -141,4 +145,6 @@ public class MainActivity extends AppCompatActivity
         // set the toolbar title
         getSupportActionBar().setTitle(title);
     }
+
+
 }
