@@ -7,6 +7,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,14 +19,15 @@ import com.akacrud.ui.adapter.RecyclerAdapterUser;
 import com.akacrud.ui.listener.ClickListener;
 import com.akacrud.ui.listener.RecyclerTouchListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
  * create an instance of this fragment.
  */
-public class UsersFragment extends Fragment {
-    private static String TAG = UsersFragment.class.getSimpleName();
+public class UserFragment extends Fragment {
+    private static String TAG = UserFragment.class.getSimpleName();
 
     private Context mContext;
     private Activity mActivity;
@@ -38,7 +40,7 @@ public class UsersFragment extends Fragment {
      */
     private UserController usersController;
 
-    public UsersFragment() {
+    public UserFragment() {
         // Required empty public constructor
     }
 
@@ -109,6 +111,34 @@ public class UsersFragment extends Fragment {
         }));
 
         showProgress(false);
+    }
+
+    public void setFilter(String query) {
+        mAdapter.setFilter(filter(userList, query));
+    }
+
+    /*
+    This function goes through the current arrangement of users and compares the matches
+    with the query inserted by the user. Matches are added in a
+    new array called userListFiltered.
+    */
+    private List<User> filter (List<User> userList, String mQuery) {
+        List<User> userListFiltered = new ArrayList<>();
+        String filterPatter = mQuery.toLowerCase();
+        Log.d("filter", "query: "+ filterPatter);
+        if (filterPatter.length()==0) {
+            userListFiltered.addAll(userList);
+        } else {
+
+            for (int i=0; i < userList.size(); i++) {
+                User user = userList.get(i);
+                Log.d("filter", "Compare "+ user.getName().toLowerCase() + " to " + filterPatter);
+                if (user.getName().toLowerCase().contains(filterPatter)){
+                    userListFiltered.add(user);
+                }
+            }
+        }
+        return userListFiltered;
     }
 
     /**

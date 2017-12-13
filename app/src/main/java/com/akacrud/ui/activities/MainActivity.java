@@ -1,13 +1,13 @@
 package com.akacrud.ui.activities;
 
+import android.app.SearchManager;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -19,11 +19,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.akacrud.R;
 import com.akacrud.ui.fragments.SettingFragment;
-import com.akacrud.ui.fragments.UsersFragment;
+import com.akacrud.ui.fragments.UserFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -32,6 +31,7 @@ public class MainActivity extends AppCompatActivity
     private FrameLayout containerBody;
     private RelativeLayout containerMain;
     private int current_fragment = 0;
+    private Fragment fragment = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +68,39 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+
+        MenuItem menuSearch = menu.findItem(R.id.action_search);
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        searchView.setIconifiedByDefault(true);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+
+                //String textToFind = s.toUpperCase();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                try {
+                    if ( current_fragment==0 && s.length() >= 0) {
+                        String findByName = s.toLowerCase();
+                        Log.d("MainActivity", "Search on fragment " + findByName);
+                        if (current_fragment==0) {
+                            UserFragment userfragment = (UserFragment) fragment;
+                            userfragment.setFilter(findByName);
+                        }
+                    }
+                } catch (Exception ex) {
+
+                }
+
+
+                return false;
+            }
+        });
+
         return true;
     }
 
@@ -77,11 +110,6 @@ public class MainActivity extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -112,13 +140,12 @@ public class MainActivity extends AppCompatActivity
      *   Method that shows the fragments on the container
      */
     private void displayView(int position) {
-        Fragment fragment = null;
         String title = getString(R.string.app_name);
         current_fragment = position;
         switch (position) {
             case 0:
                 containerBody.setVisibility(View.VISIBLE);
-                fragment = new UsersFragment();
+                fragment = new UserFragment();
                 title = getString(R.string.title_fragment_users);
                 break;
             case 1:

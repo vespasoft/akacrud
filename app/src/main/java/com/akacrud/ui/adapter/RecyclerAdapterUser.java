@@ -13,6 +13,8 @@ import android.widget.TextView;
 import com.akacrud.R;
 import com.akacrud.model.User;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -22,11 +24,11 @@ import java.util.List;
 public class RecyclerAdapterUser extends RecyclerView.Adapter<RecyclerAdapterUser.ViewHolder> {
     private Activity mActivity;
     private FragmentManager mFragmentManager;
-    private List<User> result;
+    private List<User> userList;
     private static ClickListener clickListener;
 
-    public RecyclerAdapterUser(Activity context, List<User> result) {
-        this.result = result;
+    public RecyclerAdapterUser(Activity context, List<User> userList) {
+        this.userList = userList;
         this.mActivity = context;
     }
 
@@ -47,30 +49,22 @@ public class RecyclerAdapterUser extends RecyclerView.Adapter<RecyclerAdapterUse
         //Typeface fontTypeRegular = Typeface.createFromAsset(mActivity.getAssets(), SessionPreferences.GREAT_VIBES_REGULAR);
 
         if (holder.textViewName != null)
-            holder.textViewName.setText(result.get(position).getName());
+            holder.textViewName.setText(userList.get(position).getName());
 
         if (holder.textViewBirthdate != null)
-            //holder.textViewBirthdate.setText(result.get(position).getBirthdate());
+            holder.textViewBirthdate.setText(userList.get(position).getBirthdate());
 
-        //TODO: Se debe hacer el llamado al evento OnClickListener desde el fragment
-        if (holder.cardView != null) {
+    }
 
-            holder.cardView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (!result.isEmpty()) {
-                        if (result.get(position) != null) {
-                            //mActivity.startActivity(new Intent(mActivity, CustomerDetailActivity.class).putExtra("customerId", result.get(position).getId()));
-                        }
-                    }
-                }
-            });
-        }
+    public void setFilter(List<User> userListFiltered) {
+        userList = new LinkedList<>();
+        userList.addAll(userListFiltered);
+        notifyDataSetChanged();
     }
 
     @Override
     public int getItemCount() {
-        return result.size();
+        return userList.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

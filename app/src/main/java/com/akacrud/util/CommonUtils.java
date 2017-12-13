@@ -14,7 +14,7 @@ import java.sql.Timestamp;
  * This class content common utilities to use in the application
  */
 
-public class CommonUtil {
+public class CommonUtils {
 
     // This method return the current date and time
     public static Timestamp getCurrentTimeStamp() {

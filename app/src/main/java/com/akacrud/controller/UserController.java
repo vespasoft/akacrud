@@ -10,12 +10,11 @@ import com.akacrud.R;
 import com.akacrud.model.User;
 import com.akacrud.retrofit.ApiUtils;
 import com.akacrud.retrofit.UserServices;
-import com.akacrud.ui.fragments.UsersFragment;
-import com.akacrud.util.CommonUtil;
+import com.akacrud.ui.fragments.UserFragment;
+import com.akacrud.util.CommonUtils;
 
 import org.json.JSONObject;
 
-import java.sql.Timestamp;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -30,14 +29,14 @@ import retrofit2.Response;
 public class UserController {
     private static String TAG = UserController.class.getSimpleName();
 
-    UsersFragment usersFragment;
+    UserFragment userFragment;
     Context mContext;
     Activity mActivity;
     UserServices mAPIUserService;
     List<User> usersList;
 
-    public UserController(UsersFragment fragment, Activity activity) {
-        usersFragment = fragment;
+    public UserController(UserFragment fragment, Activity activity) {
+        userFragment = fragment;
         mActivity = activity;
         mContext = activity;
     }
@@ -55,12 +54,12 @@ public class UserController {
 
                 if (response.isSuccessful()) {
                     usersList = response.body();
-                    usersFragment.setupUsers(usersList);
+                    userFragment.setupUsers(usersList);
                 } else {
-                    usersFragment.showProgress(false);
+                    userFragment.showProgress(false);
                     try {
                         JSONObject jObjError = new JSONObject(response.errorBody().string());
-                        CommonUtil.showSnackBar(mActivity, finalView, jObjError.getString("message"));
+                        CommonUtils.showSnackBar(mActivity, finalView, jObjError.getString("message"));
                         Log.i(TAG, "post error to API. " + jObjError.getString("message"));
                     } catch (Exception e) {
                         Toast.makeText(mActivity, e.getMessage(), Toast.LENGTH_LONG).show();
@@ -71,7 +70,7 @@ public class UserController {
 
             @Override
             public void onFailure(Call<List<User>> call, Throwable t) {
-                CommonUtil.showSnackBar(mActivity, finalView, mActivity.getResources().getString(R.string.message_error_internet));
+                CommonUtils.showSnackBar(mActivity, finalView, mActivity.getResources().getString(R.string.message_error_internet));
 
             }
         });
