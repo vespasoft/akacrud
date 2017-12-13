@@ -1,0 +1,58 @@
+package com.akacrud.async;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.os.AsyncTask;
+import com.akacrud.ui.activities.MainActivity;
+
+/**
+ * Created by luisvespa on 12/13/17.
+ * Background Async Task to Splash Activity
+ */
+
+public class AsyncTaskSplash extends AsyncTask<String, Void, String> {
+
+    private static final String TAG = AsyncTaskSplash.class.getSimpleName();
+
+    Activity activity;
+    static int progress;
+    int progressStatus = 0;
+
+    public AsyncTaskSplash(Activity activity) {
+        this.activity = activity;
+    }
+
+    // Simulate a long-term task
+    private int doSomeWork() {
+        try {
+            // Simulate some work
+            Thread.sleep(10);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return ++progress;
+    }
+
+    /**
+     * Working in background thread
+     * */
+    @Override
+    protected String doInBackground(String... f_url) {
+        while (progressStatus < 100) {
+            progressStatus = doSomeWork();
+        }
+        return null;
+    }
+
+    /**
+     * After completing background task
+     * Dismiss the progress dialog
+     * **/
+    protected void onPostExecute(String file_url) {
+
+        Intent intent = new Intent(activity, MainActivity.class);
+        activity.startActivity(intent);
+        activity.finish();
+    }
+
+}
