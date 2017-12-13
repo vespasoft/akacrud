@@ -27,15 +27,11 @@ import java.util.List;
 public class UsersFragment extends Fragment {
     private static String TAG = UsersFragment.class.getSimpleName();
 
-    private View mView;
     private Context mContext;
     private Activity mActivity;
     private View mProgressView;
-    private View mUserFrameLayout;
     private RecyclerView mRecyclerView;
-    private RecyclerView.LayoutManager mLayoutManager;
     private RecyclerAdapterUser mAdapter;
-    private View containerView;
     private List<User> userList;
     /**
      * Class Manager of services customer.
@@ -56,11 +52,9 @@ public class UsersFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View layout = inflater.inflate(R.layout.fragment_users, container, false);
-        containerView = layout;
         mActivity = getActivity();
         mContext = getContext();
 
-        mUserFrameLayout = layout.findViewById(R.id.user_frame_layout);
         mProgressView = layout.findViewById(R.id.progress_bar);
         mRecyclerView = (RecyclerView) layout.findViewById(R.id.recycler_view);
 
@@ -69,9 +63,8 @@ public class UsersFragment extends Fragment {
         /*
         * Create a new instance of UserController class for manage user data
         */
-        usersController = new UserController();
-
-        setupUsers( usersController.getAll() ); ;
+        usersController = new UserController(this, mActivity);
+        usersController.getAll(layout);
 
         FloatingActionButton fab = (FloatingActionButton) layout.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

@@ -13,4 +13,6 @@
     <string name="title_fragment_settings">Ajustes</string>
 
     <string name="hello_blank_fragment">Esto es un fragment de ejemplo</string>
+
+    <string name="message_error_internet">Usted tiene problemas de conexión a Internet</string>
 </resources>

@@ -1,5 +1,9 @@
 package com.akacrud.model;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 /**
@@ -7,42 +11,48 @@ import java.sql.Timestamp;
  * Class of the user entity
  */
 
-public class User {
+public class User implements Serializable {
 
-    int Id;
-    String Name;
-    Timestamp Birthdate;
+    @SerializedName("id")
+    @Expose
+    int id;
+    @SerializedName("name")
+    @Expose
+    String name;
+    @SerializedName("birthdate")
+    @Expose
+    String birthdate;
 
     public User() {
     }
 
-    public User(int id, String name, Timestamp birthdate) {
-        Id = id;
-        Name = name;
-        Birthdate = birthdate;
+    public User(int id, String name, String birthdate) {
+        this.id = id;
+        this.name = name;
+        this.birthdate = birthdate;
     }
 
     public int getId() {
-        return Id;
+        return id;
     }
 
     public void setId(int id) {
-        Id = id;
+        id = id;
     }
 
     public String getName() {
-        return Name;
+        return name;
     }
 
     public void setName(String name) {
-        Name = name;
+        this.name = name;
     }
 
-    public Timestamp getBirthdate() {
-        return Birthdate;
+    public String getBirthdate() {
+        return birthdate;
     }
 
-    public void setBirthdate(Timestamp birthdate) {
-        Birthdate = birthdate;
+    public void setBirthdate(String birthdate) {
+        this.birthdate = birthdate;
     }
 }
