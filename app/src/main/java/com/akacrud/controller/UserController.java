@@ -10,6 +10,7 @@ import com.akacrud.R;
 import com.akacrud.model.User;
 import com.akacrud.retrofit.ApiUtils;
 import com.akacrud.retrofit.UserServices;
+import com.akacrud.ui.activities.UserFormActivity;
 import com.akacrud.ui.fragments.UserFragment;
 import com.akacrud.util.CommonUtils;
 
@@ -29,14 +30,13 @@ import retrofit2.Response;
 public class UserController {
     private static String TAG = UserController.class.getSimpleName();
 
-    UserFragment userFragment;
     Context mContext;
     Activity mActivity;
     UserServices mAPIUserService;
     List<User> usersList;
 
-    public UserController(UserFragment fragment, Activity activity) {
-        userFragment = fragment;
+    public UserController(Activity activity) {
+
         mActivity = activity;
         mContext = activity;
     }
@@ -45,7 +45,7 @@ public class UserController {
         this.usersList = usersList;
     }
 
-    public void getAll() {
+    public void getAll(final UserFragment fragment, final View mView) {
         usersList = new LinkedList<>();
         mAPIUserService = ApiUtils.getAPIUserService();
         mAPIUserService.getAll().enqueue(new Callback<List<User>>() {
@@ -54,12 +54,12 @@ public class UserController {
 
                 if (response.isSuccessful()) {
                     usersList = response.body();
-                    userFragment.setupUsers(usersList);
+                    fragment.setupUsers(usersList);
                 } else {
-                    userFragment.showProgress(false);
+                    fragment.showProgress(false);
                     try {
                         JSONObject jObjError = new JSONObject(response.errorBody().string());
-                        CommonUtils.showSnackBar(mActivity, userFragment.layout, jObjError.getString("message"));
+                        CommonUtils.showSnackBar(mActivity, mView, jObjError.getString("message"));
                         Log.i(TAG, "post error to API. " + jObjError.getString("message"));
                     } catch (Exception e) {
                         Toast.makeText(mActivity, e.getMessage(), Toast.LENGTH_LONG).show();
@@ -70,12 +70,47 @@ public class UserController {
 
             @Override
             public void onFailure(Call<List<User>> call, Throwable t) {
-                userFragment.showErrorInternetConnection(true);
-                CommonUtils.showSnackBar(mActivity, userFragment.layout, mActivity.getResources().getString(R.string.message_error_internet));
+                // fail internet connection or server connection
+                fragment.showProgress(false);
+                fragment.showErrorInternetConnection(true);
+                CommonUtils.showSnackBar(mActivity, mView, mActivity.getResources().getString(R.string.message_error_internet));
 
             }
         });
 
+    }
+
+    public void create (final UserFormActivity activity, final View mView, User user) {
+        activity.showProgress(true);
+        CommonUtils.hideKeyBoard(activity);
+
+        mAPIUserService = ApiUtils.getAPIUserService();
+        mAPIUserService.create(user).enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+
+                activity.showProgress(false);
+                if (response.isSuccessful()) {
+                    // The transaction is successful
+                    activity.finish();
+                } else {
+                    try {
+                        JSONObject jObjError = new JSONObject(response.errorBody().string());
+                        CommonUtils.showSnackBar(mActivity, mView, jObjError.getString("message"));
+                    } catch (Exception e) {
+                        Toast.makeText(mActivity, e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                // fail internet connection or server connection
+                activity.showProgress(false);
+                CommonUtils.showSnackBar(mActivity, mView, mActivity.getResources().getString(R.string.message_error_internet));
+            }
+        });
     }
 
 }

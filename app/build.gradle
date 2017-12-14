@@ -12,7 +12,7 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         testApplicationId "com.akacrud.tests"
     }
-    testOptions{
+    testOptions {
         reportDir = "$project.buildDir/testResults/report"
         resultsDir = "$project.buildDir/testResults"
     }
@@ -27,7 +27,7 @@ android {
             applicationId "com.akacrud"
             buildConfigField 'String', 'BASE_URL', '"https://hello-world.innocv.com"'  //test
 //          buildConfigField 'String', 'BASE_URL', '"https://hello-world.innocv.com"' //live
-            buildConfigField 'String', 'DEFAULT_APP_LANGUAGE', '"ES"'
+            buildConfigField 'String', 'DEFAULT_APP_LANGUAGE', '"EN"'
             buildConfigField "boolean", "LANGUAGE_ENABLED", "true"
             resValue 'string', 'app_name', '"AkaCrud"'
             versionName "1.0.1"

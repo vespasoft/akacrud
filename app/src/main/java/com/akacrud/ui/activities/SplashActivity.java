@@ -46,7 +46,7 @@ public class SplashActivity extends AppCompatActivity {
         progressBar.setVisibility(View.INVISIBLE);
 
         buttonEnter.setVisibility(View.VISIBLE);
-        buttonEnter.startAnimation(AnimationUtils.loadAnimation(this, R.anim.rotate));
+        buttonEnter.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_in));
         buttonEnter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -136,6 +136,16 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    public void onClick(View v) {
+        final int id = v.getId();
+        switch (id) {
+            case R.id.buttonRetry:
+                displayView(0);
+                break;
+
+        }
+    }
+
     /*
      *   Method that shows the fragments on the container
      */

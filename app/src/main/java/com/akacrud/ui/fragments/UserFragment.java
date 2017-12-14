@@ -2,6 +2,7 @@ package com.akacrud.ui.fragments;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -12,11 +13,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.Toast;
 import com.akacrud.R;
 import com.akacrud.controller.UserController;
 import com.akacrud.model.User;
+import com.akacrud.ui.activities.UserFormActivity;
 import com.akacrud.ui.adapter.RecyclerAdapterUser;
 import com.akacrud.ui.listener.ClickListener;
 import com.akacrud.ui.listener.RecyclerTouchListener;
@@ -33,7 +36,7 @@ public class UserFragment extends Fragment {
 
     private Context mContext;
     private Activity mActivity;
-    public View layout;
+    private View layout;
     private View mProgressView;
     private RecyclerView mRecyclerView;
     private RecyclerAdapterUser mAdapter;
@@ -61,24 +64,22 @@ public class UserFragment extends Fragment {
         mActivity = getActivity();
         mContext = getContext();
 
-        mProgressView = layout.findViewById(R.id.progress_bar);
+        mProgressView = layout.findViewById(R.id.progressBar);
         mRecyclerView = (RecyclerView) layout.findViewById(R.id.recycler_view);
 
         showProgress(true);
 
-        /*
-        * Create a new instance of UserController class for manage user data
-        */
-        usersController = new UserController(this, mActivity);
-        usersController.getAll();
+        // Create a new instance of UserController class for manage user data
+        usersController = new UserController(mActivity);
+        usersController.getAll(this, layout);
 
         FloatingActionButton fab = (FloatingActionButton) layout.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //TODO: En este evento se debe llamar a un nuevo activity para registrar un nuevo usuario
-                //Intent intent = new Intent(mActivity, CustomerActivity.class);
-                //startActivity(intent);
+                Intent intent = new Intent(mActivity, UserFormActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -86,7 +87,7 @@ public class UserFragment extends Fragment {
     }
 
     /**
-     * Get the user list
+     *  Get the user list
      */
     public List<User> getUserList() {
         return userList;
@@ -133,11 +134,10 @@ public class UserFragment extends Fragment {
         if (filterPatter.length()==0) {
             userListFiltered.addAll(userList);
         } else {
-
             for (int i=0; i < userList.size(); i++) {
                 User user = userList.get(i);
                 Log.d("filter", "Compare "+ user.getName().toLowerCase() + " to " + filterPatter);
-                if (user.getName().toLowerCase().contains(filterPatter)){
+                if (user.getName().toLowerCase().contains(filterPatter)) {
                     userListFiltered.add(user);
                 }
             }
@@ -145,18 +145,10 @@ public class UserFragment extends Fragment {
         return userListFiltered;
     }
 
-    public void showErrorInternetConnection(boolean shows) {
+    public void showErrorInternetConnection(boolean show) {
         cardViewCloudOff = (CardView) mActivity.findViewById(R.id.cardViewCloudOff);
-        cardViewCloudOff.setVisibility(View.VISIBLE);
-        Button buttonRetry = (Button) mActivity.findViewById(R.id.buttonRetry);
-        buttonRetry.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showErrorInternetConnection(false);
-                showProgress(true);
-                usersController.getAll();
-            }
-        });
+        cardViewCloudOff.setVisibility(show ? View.VISIBLE : View.GONE);
+        cardViewCloudOff.startAnimation(AnimationUtils.loadAnimation(mActivity, R.anim.fade_in));
     }
 
     /**

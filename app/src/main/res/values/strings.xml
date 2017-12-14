@@ -5,6 +5,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_search">Search</string>
+    <string name="action_accept">Accept</string>
     <string name="action_update">Update</string>
     <string name="action_delete">Delete</string>
     <string name="action_users">Users</string>
@@ -13,10 +14,18 @@
     <string name="action_settings">Settings</string>
     <string name="action_exit">Exit</string>
 
-    <string name="title_fragment_users">Users</string>
-    <string name="title_fragment_settings">Settings</string>
+    <string name="prompt_name">Insert your name</string>
+    <string name="prompt_birthdate">Select your birth date</string>
+
+    <string name="field_name_required">The name is required</string>
+    <string name="field_birthdate_required">The birth date is required</string>
 
     <string name="hello_blank_fragment">This is a fragment of example</string>
 
     <string name="message_error_internet">Try again when your internet connection improves</string>
+
+    <string name="title_fragment_users">Users</string>
+    <string name="title_fragment_settings">Settings</string>
+    <string name="title_activity_user_form_create">Create User</string>
+    <string name="title_activity_user_form_update">Update User</string>
 </resources>
