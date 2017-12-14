@@ -5,12 +5,14 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 import com.akacrud.R;
 import com.akacrud.controller.UserController;
@@ -31,9 +33,11 @@ public class UserFragment extends Fragment {
 
     private Context mContext;
     private Activity mActivity;
+    public View layout;
     private View mProgressView;
     private RecyclerView mRecyclerView;
     private RecyclerAdapterUser mAdapter;
+    private CardView cardViewCloudOff;
     private List<User> userList;
     /**
      * Class Manager of services customer.
@@ -53,7 +57,7 @@ public class UserFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View layout = inflater.inflate(R.layout.fragment_users, container, false);
+        layout = inflater.inflate(R.layout.fragment_users, container, false);
         mActivity = getActivity();
         mContext = getContext();
 
@@ -66,7 +70,7 @@ public class UserFragment extends Fragment {
         * Create a new instance of UserController class for manage user data
         */
         usersController = new UserController(this, mActivity);
-        usersController.getAll(layout);
+        usersController.getAll();
 
         FloatingActionButton fab = (FloatingActionButton) layout.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -139,6 +143,20 @@ public class UserFragment extends Fragment {
             }
         }
         return userListFiltered;
+    }
+
+    public void showErrorInternetConnection(boolean shows) {
+        cardViewCloudOff = (CardView) mActivity.findViewById(R.id.cardViewCloudOff);
+        cardViewCloudOff.setVisibility(View.VISIBLE);
+        Button buttonRetry = (Button) mActivity.findViewById(R.id.buttonRetry);
+        buttonRetry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showErrorInternetConnection(false);
+                showProgress(true);
+                usersController.getAll();
+            }
+        });
     }
 
     /**

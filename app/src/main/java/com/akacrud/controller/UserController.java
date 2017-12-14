@@ -45,7 +45,7 @@ public class UserController {
         this.usersList = usersList;
     }
 
-    public void getAll(final View finalView) {
+    public void getAll() {
         usersList = new LinkedList<>();
         mAPIUserService = ApiUtils.getAPIUserService();
         mAPIUserService.getAll().enqueue(new Callback<List<User>>() {
@@ -59,7 +59,7 @@ public class UserController {
                     userFragment.showProgress(false);
                     try {
                         JSONObject jObjError = new JSONObject(response.errorBody().string());
-                        CommonUtils.showSnackBar(mActivity, finalView, jObjError.getString("message"));
+                        CommonUtils.showSnackBar(mActivity, userFragment.layout, jObjError.getString("message"));
                         Log.i(TAG, "post error to API. " + jObjError.getString("message"));
                     } catch (Exception e) {
                         Toast.makeText(mActivity, e.getMessage(), Toast.LENGTH_LONG).show();
@@ -70,7 +70,8 @@ public class UserController {
 
             @Override
             public void onFailure(Call<List<User>> call, Throwable t) {
-                CommonUtils.showSnackBar(mActivity, finalView, mActivity.getResources().getString(R.string.message_error_internet));
+                userFragment.showErrorInternetConnection(true);
+                CommonUtils.showSnackBar(mActivity, userFragment.layout, mActivity.getResources().getString(R.string.message_error_internet));
 
             }
         });

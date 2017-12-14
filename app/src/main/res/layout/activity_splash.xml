@@ -10,15 +10,21 @@
         android:text="@string/app_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/letter_20"
+        android:padding="12dp"
+        android:textSize="20sp"
         android:textStyle="bold"
+        android:shadowColor="#7000"
+        android:shadowDx="12"
+        android:shadowDy="12"
+        android:shadowRadius="8"
         android:gravity="center"
         tools:layout_editor_absoluteY="121dp"
         tools:layout_editor_absoluteX="155dp"
         android:layout_marginBottom="84dp"
         android:layout_above="@+id/progressBar"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:id="@+id/textViewTitle" />
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -28,5 +34,15 @@
         android:layout_centerInParent="true"
         tools:layout_editor_absoluteX="167dp"
         tools:layout_editor_absoluteY="230dp" />
+
+    <Button
+        android:id="@+id/buttonEnter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="37dp"
+        android:text="Entrar Ahora"
+        android:layout_below="@+id/textViewTitle"
+        android:background="@drawable/button_enter"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

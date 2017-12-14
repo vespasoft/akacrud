@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import com.akacrud.ui.activities.MainActivity;
+import com.akacrud.ui.activities.SplashActivity;
 
 /**
  * Created by luisvespa on 12/13/17.
@@ -14,12 +15,12 @@ public class AsyncTaskSplash extends AsyncTask<String, Void, String> {
 
     private static final String TAG = AsyncTaskSplash.class.getSimpleName();
 
-    Activity activity;
+    SplashActivity activity;
     static int progress;
     int progressStatus = 0;
 
     public AsyncTaskSplash(Activity activity) {
-        this.activity = activity;
+        this.activity = (SplashActivity) activity;
     }
 
     // Simulate a long-term task
@@ -50,9 +51,7 @@ public class AsyncTaskSplash extends AsyncTask<String, Void, String> {
      * **/
     protected void onPostExecute(String file_url) {
 
-        Intent intent = new Intent(activity, MainActivity.class);
-        activity.startActivity(intent);
-        activity.finish();
+        activity.finishLoader();
     }
 
 }

@@ -1,4 +1,4 @@
-package com.akacrud;
+package com.akacrud.tests;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

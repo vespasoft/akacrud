@@ -5,14 +5,19 @@
     <string name="navigation_drawer_open">Abrir menu de navegación</string>
     <string name="navigation_drawer_close">Cerrar menu de navegación</string>
 
+    <string name="action_search">Buscar</string>
+    <string name="action_retry">Reintentar</string>
+    <string name="action_update">Actualizar</string>
+    <string name="action_delete">Eliminar</string>
     <string name="action_users">Usuarios</string>
     <string name="action_settings">Ajustes</string>
     <string name="action_exit">Salir</string>
+    <string name="action_enter">Entrar Ahora</string>
 
     <string name="title_fragment_users">Usuarios</string>
     <string name="title_fragment_settings">Ajustes</string>
 
     <string name="hello_blank_fragment">Esto es un fragment de ejemplo</string>
 
-    <string name="message_error_internet">Usted tiene problemas de conexión a Internet</string>
+    <string name="message_error_internet">Intentalo de nuevo cuando mejore tu conexión a internet</string>
 </resources>
