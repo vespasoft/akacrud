@@ -3,16 +3,12 @@ package com.akacrud.tests;
 import android.support.test.rule.ActivityTestRule;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.ArrayAdapter;
-
-import com.akacrud.*;
 import com.akacrud.R;
 import com.akacrud.ui.activities.MainActivity;
 
 import org.junit.Rule;
 import org.junit.Test;
 
-import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.assertThat;
