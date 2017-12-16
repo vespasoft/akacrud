@@ -132,6 +132,7 @@ public class UserFormActivity extends AppCompatActivity {
         textViewName.setText(user.getName());
         textViewBirthDate.setText(user.getBirthdate());
 
+        showProgress(false);
     }
 
     /**

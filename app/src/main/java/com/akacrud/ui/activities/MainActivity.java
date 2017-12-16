@@ -119,6 +119,8 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    //TODO: This method is in disuse if you do not plan to use more can be eliminated
+    // This method show and hide the Toolbar when the ActionMode is activated
     public void showToolbar(boolean show) {
         if (show) {
             toolbar.setVisibility(View.VISIBLE);
