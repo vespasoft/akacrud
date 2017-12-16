@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,14 +23,18 @@ import java.util.List;
  */
 
 public class RecyclerAdapterUser extends RecyclerView.Adapter<RecyclerAdapterUser.ViewHolder> {
-    private Activity mActivity;
-    private FragmentManager mFragmentManager;
-    private List<User> userList;
-    private static ClickListener clickListener;
+    private List<User> users;
 
-    public RecyclerAdapterUser(Activity context, List<User> userList) {
-        this.userList = userList;
-        this.mActivity = context;
+    // array used to perform multiple animation at once
+    private SparseBooleanArray animationItemsIndex;
+    private boolean reverseAllAnimations = false;
+
+    // index is used to animate only the selected row
+    // dirty fix, find a better solution
+    private static int currentSelectedIndex = -1;
+
+    public RecyclerAdapterUser(List<User> users) {
+        this.users = users;
     }
 
 
@@ -49,50 +54,47 @@ public class RecyclerAdapterUser extends RecyclerView.Adapter<RecyclerAdapterUse
         //Typeface fontTypeRegular = Typeface.createFromAsset(mActivity.getAssets(), SessionPreferences.GREAT_VIBES_REGULAR);
 
         if (holder.textViewName != null)
-            holder.textViewName.setText(userList.get(position).getName());
+            holder.textViewName.setText(users.get(position).getName());
 
         if (holder.textViewBirthdate != null)
-            holder.textViewBirthdate.setText(userList.get(position).getBirthdate());
+            holder.textViewBirthdate.setText(users.get(position).getBirthdate());
+
+        holder.itemView.setSelected(currentSelectedIndex == position);
 
     }
 
+    public int getSelectedItem() {
+        return currentSelectedIndex;
+    }
+
+    public void setSelectedItem(int selectedItem) {
+        this.currentSelectedIndex = selectedItem;
+    }
+
     public void setFilter(List<User> userListFiltered) {
-        userList = new LinkedList<>();
-        userList.addAll(userListFiltered);
+        users = new LinkedList<>();
+        users.addAll(userListFiltered);
         notifyDataSetChanged();
     }
 
     @Override
     public int getItemCount() {
-        return userList.size();
+        return users.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView textViewName;
         public TextView textViewBirthdate;
-        public CardView cardView;
+
 
         public ViewHolder(View mView) {
             super(mView);
-            mView.setOnClickListener(this);
             textViewName = (TextView) mView.findViewById(R.id.textViewName);
             textViewBirthdate = (TextView) mView.findViewById(R.id.textViewBirthdate);
-            cardView = (CardView) mView.findViewById(R.id.cardView);
+
         }
 
-        @Override
-        public void onClick(View v) {
-            clickListener.onItemClick(getAdapterPosition(), v);
-        }
     }
 
-    public void setOnItemClickListener(ClickListener clickListener) {
-        RecyclerAdapterUser.clickListener = clickListener;
-    }
-
-    public interface ClickListener {
-        void onItemClick(int position, View v);
-
-    }
 }

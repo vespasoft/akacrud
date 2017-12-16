@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.view.ActionMode;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.View;
@@ -17,27 +19,32 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.akacrud.R;
 import com.akacrud.ui.fragments.SettingFragment;
 import com.akacrud.ui.fragments.UserFragment;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener{
 
     private Context mContext;
+    private Toolbar toolbar;
     private FrameLayout containerBody;
     private RelativeLayout containerMain;
+    private boolean modeEdit = false;
     private int current_fragment = 0;
     private Fragment fragment = null;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         containerBody = (FrameLayout)findViewById(R.id.container_body);
 
@@ -67,11 +74,18 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        Toolbar tb = (Toolbar) findViewById(R.id.toolbar);
+        tb.inflateMenu(R.menu.main);
 
-        MenuItem menuSearch = menu.findItem(R.id.action_search);
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+
+        tb.setOnMenuItemClickListener(
+                new Toolbar.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        return onOptionsItemSelected(item);
+                    }
+                });
+        SearchView searchView = (SearchView) tb.getMenu().findItem(R.id.action_search).getActionView();
         searchView.setIconifiedByDefault(true);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -101,17 +115,17 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        return super.onOptionsItemSelected(item);
+    public void showToolbar(boolean show) {
+        if (show) {
+            toolbar.setVisibility(View.VISIBLE);
+            //toolbar.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_in));
+        } else {
+            toolbar.setVisibility(View.GONE);
+        }
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -182,6 +196,5 @@ public class MainActivity extends AppCompatActivity
         // set the toolbar title
         getSupportActionBar().setTitle(title);
     }
-
 
 }

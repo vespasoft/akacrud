@@ -9,6 +9,8 @@
     <color name="windowBackground">#edf2f5</color>
     <color name="navigationBarColor">#607D8B</color>
     <color name="colorTransparent">#00000000</color>
+    <color name="row_activated">#e0e0e0</color>
+    <color name="bg_action_mode">#757575</color>
     <color name="colorGrey">#CFD8DC</color>
     <color name="colorWhite">#ffffff</color>
 </resources>
