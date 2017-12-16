@@ -120,6 +120,43 @@ public class UserController {
         });
     }
 
+
+    public void update (final UserFormActivity activity, final View mView, User user) {
+        activity.showProgress(true);
+        CommonUtils.hideKeyBoard(activity);
+
+        mAPIUserService = ApiUtils.getAPIUserService();
+        mAPIUserService.update(user).enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+
+                activity.showProgress(false);
+                if (response.isSuccessful()) {
+                    // The transaction is successful
+                    Intent data = new Intent();
+                    activity.setResult(RESULT_OK, data);
+                    activity.finish();
+                } else {
+                    try {
+                        JSONObject jObjError = new JSONObject(response.errorBody().string());
+                        CommonUtils.showSnackBar(mActivity, mView, jObjError.getString("message"));
+                    } catch (Exception e) {
+                        Toast.makeText(mActivity, e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                // fail internet connection or server connection
+                activity.showProgress(false);
+                CommonUtils.showSnackBar(mActivity, mView, mActivity.getResources().getString(R.string.message_error_internet));
+            }
+        });
+    }
+
+
     public void remove (final UserFragment fragment, final View mView, final ActionMode mode, int id) {
         fragment.showProgress(true);
         mAPIUserService = ApiUtils.getAPIUserService();

@@ -104,7 +104,23 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         usersController.getAll(this, layout);
     }
 
-    // delete the selected user from recycler view
+    // Edit the selected user from recycler view
+    public void editCurrentUser(ActionMode mode) {
+        try {
+            User userSelected = mAdapter.getSelectedItem();
+            Intent intent = new Intent(mActivity, UserFormActivity.class);
+            // it is opened the user form activity in update mode
+            intent.putExtra("mode_update", true);
+            // a serializable object is passed with the user's data
+            intent.putExtra("user", userSelected);
+            // start activity
+            startActivityForResult(intent, request_UpdateCode);
+        } catch (Exception ex) {
+            Log.d(TAG, "Error to delete a user "+ ex.toString());
+        }
+    }
+
+    // Delete the selected user from recycler view
     public void deleteCurrentUser(ActionMode mode) {
         try {
             // delete the selected item
@@ -272,14 +288,12 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             switch (item.getItemId()) {
 
+                case R.id.action_edit:
+                    editCurrentUser(mode);
+                    return true;
+
                 case R.id.action_delete:
                     deleteCurrentUser(mode);
-                    /*AlertDialogUtils.createAlertDialogConfirmation(mContext,
-                            UserFragment.this,
-                            mode,
-                            getResources().getString(R.string.title_activity_user_form_delete),
-                            getResources().getString(R.string.question_confirmation_delete));*/
-
                     return true;
 
                 default:

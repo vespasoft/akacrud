@@ -6,6 +6,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -31,16 +32,20 @@ public class UserFormActivity extends AppCompatActivity {
 
     private static String TAG = UserFormActivity.class.getSimpleName();
 
+    private boolean mode_update = false;
+
     private Activity mActivity;
     private Context mContext;
     private View mView;
     private ProgressBar mProgressView;
     private TextView textViewName;
     private TextView textViewBirthDate;
-    /**
-     * Class Manager of services customer.
-     */
+
+    // Class Manager of services customer.
     private UserController userController;
+
+    // Entity of the user
+    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +63,7 @@ public class UserFormActivity extends AppCompatActivity {
 
         mView = findViewById(R.id.linearLayoutUser);
         mProgressView = (ProgressBar) findViewById(R.id.progressBar);
+
         textViewName = (TextView) findViewById(R.id.textViewName);
         textViewBirthDate = (TextView) findViewById(R.id.textViewBirthDate);
 
@@ -72,6 +78,16 @@ public class UserFormActivity extends AppCompatActivity {
 
         // Create a new instance of UserController class for manage user data
         userController = new UserController(mActivity);
+
+        // get the intent object
+        Intent intent = getIntent();
+        // get the value mode_update
+        mode_update = intent.getBooleanExtra("mode_update", false);
+        if (mode_update) {
+            // se activa la animacion del Loader
+            showProgress(true);
+            setupUser((User) intent.getSerializableExtra("user"));
+        }
 
     }
 
@@ -97,14 +113,28 @@ public class UserFormActivity extends AppCompatActivity {
             // form field with an error.
             CommonUtils.showSnackBar(mActivity, mView, mMessage);
         } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the User update attempt.
-            // showProgress(true);
-            User user = new User();
+            if (!mode_update) {
+                user = new User();
+            }
             user.setName(name);
             user.setBirthdate(birthdate);
-            userController.create(this, mView, user);
+
+            if (mode_update)
+                userController.update(this, mView, user);
+            else
+                userController.create(this, mView, user);
         }
+
+    }
+
+    private void setupUser(User user) {
+        this.user = user;
+
+        textViewName = (TextView) findViewById(R.id.textViewName);
+        textViewBirthDate = (TextView) findViewById(R.id.textViewBirthDate);
+
+        textViewName.setText(user.getName());
+        textViewBirthDate.setText(user.getBirthdate());
 
     }
 

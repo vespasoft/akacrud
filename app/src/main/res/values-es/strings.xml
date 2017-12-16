@@ -19,6 +19,9 @@
     <string name="prompt_name">Nombres</string>
     <string name="prompt_birthdate">Fecha de Nacimiento</string>
 
+    <string name="field_name_required">El nombre es obligatorio</string>
+    <string name="field_birthdate_required">La fecha de nacimiento es opbligatoria</string>
+
     <string name="hello_blank_fragment">Esto es un fragment de ejemplo</string>
     <string name="message_error_internet">Intentalo de nuevo cuando mejore tu conexión a internet</string>
     <string name="question_confirmation_delete">You are sure to delete this user</string>
