@@ -13,7 +13,6 @@ import java.util.Calendar;
 
 /**
  * Created by luisvespa on 12/14/17.
- * Example de como llamar a la clase
  */
 
 @SuppressLint("ValidFragment")
