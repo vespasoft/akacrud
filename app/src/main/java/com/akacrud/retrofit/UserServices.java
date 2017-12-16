@@ -32,6 +32,6 @@ public interface UserServices {
     Call<User> update(@Body User body);
 
     @GET("/api/user/remove/{id}")
-    Call<String> remove(@Body User body);
+    Call<Void> remove(@Path("id") int id);
 
 }

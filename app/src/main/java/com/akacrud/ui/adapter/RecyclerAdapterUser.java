@@ -25,10 +25,6 @@ import java.util.List;
 public class RecyclerAdapterUser extends RecyclerView.Adapter<RecyclerAdapterUser.ViewHolder> {
     private List<User> users;
 
-    // array used to perform multiple animation at once
-    private SparseBooleanArray animationItemsIndex;
-    private boolean reverseAllAnimations = false;
-
     // index is used to animate only the selected row
     // dirty fix, find a better solution
     private static int currentSelectedIndex = -1;
@@ -63,8 +59,8 @@ public class RecyclerAdapterUser extends RecyclerView.Adapter<RecyclerAdapterUse
 
     }
 
-    public int getSelectedItem() {
-        return currentSelectedIndex;
+    public User getSelectedItem() {
+        return users.get(currentSelectedIndex);
     }
 
     public void setSelectedItem(int selectedItem) {

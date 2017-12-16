@@ -9,7 +9,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -19,7 +18,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.Toast;
 import com.akacrud.R;
 import com.akacrud.controller.UserController;
@@ -27,12 +25,13 @@ import com.akacrud.model.User;
 import com.akacrud.ui.activities.MainActivity;
 import com.akacrud.ui.activities.UserFormActivity;
 import com.akacrud.ui.adapter.RecyclerAdapterUser;
-import com.akacrud.ui.helper.DividerItemDecoration;
 import com.akacrud.ui.listener.ClickListener;
 import com.akacrud.ui.listener.RecyclerTouchListener;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.app.Activity.RESULT_CANCELED;
+import static android.app.Activity.RESULT_OK;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -49,13 +48,15 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     private RecyclerAdapterUser mAdapter;
     private CardView cardViewCloudOff;
     private List<User> users;
-    private SwipeRefreshLayout swipeRefreshLayout;
     private ActionModeCallback actionModeCallback;
     private ActionMode actionMode;
     /**
      * Class Manager of services customer.
      */
     private UserController usersController;
+
+    private int request_CreateCode = 1;
+    private int request_UpdateCode = 2;
 
     public UserFragment() {
         // Required empty public constructor
@@ -77,78 +78,77 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         mProgressView = layout.findViewById(R.id.progressBar);
         mRecyclerView = (RecyclerView) layout.findViewById(R.id.recycler_view);
 
-        swipeRefreshLayout = (SwipeRefreshLayout) layout.findViewById(R.id.swipe_refresh_layout);
-        swipeRefreshLayout.setOnRefreshListener(this);
+        usersController = new UserController(mActivity);
 
         actionModeCallback = new ActionModeCallback();
-
-        // show loader and fetch messages
-        swipeRefreshLayout.post(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        getUsers();
-                    }
-                }
-        );
-
 
         FloatingActionButton fab = (FloatingActionButton) layout.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: En este evento se debe llamar a un nuevo activity para registrar un nuevo usuario
                 Intent intent = new Intent(mActivity, UserFormActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, request_CreateCode);
             }
         });
+
+        getAllUsers();
 
         return layout;
     }
 
     /**
-     * Fetches mail messages by making HTTP request
-     * url: http://api.androidhive.info/json/inbox.json
+     * Fetches user list by making HTTP request
      */
-    private void getUsers() {
-        swipeRefreshLayout.setRefreshing(true);
+    public void getAllUsers() {
         showProgress(true);
-        usersController = new UserController(mActivity);
         usersController.getAll(this, layout);
+    }
+
+    // delete the selected user from recycler view
+    public void deleteCurrentUser(ActionMode mode) {
+        try {
+            // delete the selected item
+            User userSelected = mAdapter.getSelectedItem();
+            Log.d(TAG, "User to delete " + userSelected.getName());
+            usersController.remove(UserFragment.this, layout, mode, userSelected.getId() );
+        } catch (Exception ex) {
+            Log.d(TAG, "Error to delete a user "+ ex.toString());
+        }
+
     }
 
     /**
      * Shows the user data in the RecyclerView
      */
     public void setupUsers(List<User> data) {
-        this.users = data;
+        try {
+            this.users = data;
+            LinearLayoutManager mLayoutManager = new LinearLayoutManager(mActivity);
+            mRecyclerView.setLayoutManager(mLayoutManager);
+            mAdapter = new RecyclerAdapterUser(users);
+            mRecyclerView.setAdapter(mAdapter);
+            mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(mContext, mRecyclerView, new ClickListener() {
+                @Override
+                public void onClick(View view, int position) {
+                    Toast.makeText(mContext, "Has presionado el usuario " + users.get(position).getName() , Toast.LENGTH_LONG).show();
+                }
 
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(mActivity);
-        mAdapter = new RecyclerAdapterUser(users);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        //mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        //mRecyclerView.addItemDecoration(new DividerItemDecoration(mActivity, LinearLayoutManager.VERTICAL));
-        mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(mContext, mRecyclerView, new ClickListener() {
-            @Override
-            public void onClick(View view, int position) {
-                Toast.makeText(mContext, "Has presionado el usuario " + users.get(position).getName() , Toast.LENGTH_LONG).show();
-            }
+                @Override
+                public void onLongClick(View view, int position) {
+                    try {
+                        Toast.makeText(mContext, "Has seleccionado al usuario " + users.get(position).getName() , Toast.LENGTH_LONG).show();
+                        // long press is performed, enable action mode
+                        enableActionMode(position);
+                    } catch (Exception ex){
+                        Log.e(TAG, "error in onLongClick. " + ex.toString());
+                    }
+                }
+            }));
 
-            @Override
-            public void onLongClick(View view, int position) {
-                // Redraw the old selection and the new
-                mAdapter.notifyItemChanged(position);
-                mAdapter.setSelectedItem(position);
-                mAdapter.notifyItemChanged(position);
-                mAdapter.notifyDataSetChanged();
-                // long press is performed, enable action mode
-                enableActionMode(position);
-            }
-        }));
-
-        swipeRefreshLayout.setRefreshing(false);
-        showProgress(false);
+            showProgress(false);
+        } catch (Exception ex) {
+            Log.e(TAG, "Error in setupusers method. " + ex.toString());
+        }
     }
 
     public void setFilter(String query) {
@@ -163,24 +163,19 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     private List<User> filter (List<User> userList, String mQuery) {
         List<User> userListFiltered = new ArrayList<>();
         String filterPatter = mQuery.toLowerCase();
-        Log.d("filter", "query: "+ filterPatter);
+        Log.d(TAG, "filter query: "+ filterPatter);
         if (filterPatter.length()==0) {
             userListFiltered.addAll(userList);
         } else {
             for (int i=0; i < userList.size(); i++) {
                 User user = userList.get(i);
-                Log.d("filter", "Compare "+ user.getName().toLowerCase() + " to " + filterPatter);
+                Log.d(TAG, "compare "+ user.getName().toLowerCase() + " to " + filterPatter);
                 if (user.getName().toLowerCase().contains(filterPatter)) {
                     userListFiltered.add(user);
                 }
             }
         }
         return userListFiltered;
-    }
-
-    // deleting the messages from recycler view
-    public void deleteMessages() {
-
     }
 
     public void showErrorInternetConnection(boolean show) {
@@ -196,6 +191,53 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
+
+    private void enableActionMode(int position) {
+        if (actionMode == null) {
+            actionMode = mActivity.startSupportActionMode(actionModeCallback);
+        }
+        toggleSelection(position);
+    }
+
+
+    private void toggleSelection(int position) {
+        mAdapter.setSelectedItem(position);
+        mAdapter.notifyDataSetChanged();
+
+        if (position < 0) {
+            actionMode.finish();
+        } else {
+            //mActivity.showToolbar(false);
+            actionMode.setTitle(String.valueOf(position));
+            actionMode.invalidate();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == request_CreateCode) {
+            if (resultCode==RESULT_OK) {
+                // Update the users list after a user added
+                getAllUsers();
+            } else if (resultCode==RESULT_CANCELED) {
+                // The user canceled the operation ...
+                Log.e(TAG, "The user canceled the operation ...");
+            }
+        }
+
+        if (requestCode == request_UpdateCode) {
+            if (resultCode==RESULT_OK) {
+                // Update the users list after a user added
+                getAllUsers();
+            } else if (resultCode==RESULT_CANCELED) {
+                // The user canceled the operation ...
+                Log.e(TAG, "The user canceled the operation ...");
+            }
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -209,35 +251,15 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     @Override
     public void onRefresh() {
         // update the users list
-        getUsers();
+        getAllUsers();
     }
 
-    private void enableActionMode(int position) {
-        if (actionMode == null) {
-            actionMode = mActivity.startSupportActionMode(actionModeCallback);
-        }
-        toggleSelection(position);
-    }
-
-    private void toggleSelection(int position) {
-        mAdapter.setSelectedItem(position);
-
-        if (position < 0) {
-            actionMode.finish();
-        } else {
-            //mActivity.showToolbar(false);
-            actionMode.setTitle(String.valueOf(position));
-            actionMode.invalidate();
-        }
-    }
 
     private class ActionModeCallback implements ActionMode.Callback {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             mode.getMenuInflater().inflate(R.menu.menu_action_mode, menu);
 
-            // disable swipe refresh if action mode is enabled
-            swipeRefreshLayout.setEnabled(false);
             return true;
         }
 
@@ -251,10 +273,13 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             switch (item.getItemId()) {
 
                 case R.id.action_delete:
-                    // delete all the selected messages
-                    // deleteMessages();
-                    mode.finish();
-                    //mActivity.showToolbar(true);
+                    deleteCurrentUser(mode);
+                    /*AlertDialogUtils.createAlertDialogConfirmation(mContext,
+                            UserFragment.this,
+                            mode,
+                            getResources().getString(R.string.title_activity_user_form_delete),
+                            getResources().getString(R.string.question_confirmation_delete));*/
+
                     return true;
 
                 default:
@@ -267,7 +292,6 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         @Override
         public void onDestroyActionMode(ActionMode mode) {
             mAdapter.setSelectedItem(-1);
-            swipeRefreshLayout.setEnabled(true);
             actionMode = null;
             //mActivity.showToolbar(true);
             mRecyclerView.post(new Runnable() {
@@ -275,6 +299,7 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 public void run() {
                     //mAdapter.resetAnimationIndex();
                     //mAdapter.notifyDataSetChanged();
+                    getAllUsers();
                 }
             });
         }

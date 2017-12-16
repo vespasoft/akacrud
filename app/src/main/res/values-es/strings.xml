@@ -6,7 +6,8 @@
     <string name="navigation_drawer_close">Cerrar menu de navegación</string>
 
     <string name="action_search">Buscar</string>
-    <string name="action_accept">Aceptar</string>
+    <string name="action_accept">Acceptar</string>
+    <string name="action_cancel">Cancelar</string>
     <string name="action_retry">Reintentar</string>
     <string name="action_update">Actualizar</string>
     <string name="action_delete">Eliminar</string>
@@ -20,9 +21,11 @@
 
     <string name="hello_blank_fragment">Esto es un fragment de ejemplo</string>
     <string name="message_error_internet">Intentalo de nuevo cuando mejore tu conexión a internet</string>
+    <string name="question_confirmation_delete">You are sure to delete this user</string>
 
     <string name="title_fragment_users">Usuarios</string>
     <string name="title_fragment_settings">Ajustes</string>
     <string name="title_activity_user_form_create">Crear Usuario</string>
     <string name="title_activity_user_form_update">Modificar Usuario</string>
+    <string name="title_activity_user_form_delete">Eliminar User</string>
 </resources>
