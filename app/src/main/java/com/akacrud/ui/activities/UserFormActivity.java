@@ -9,11 +9,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -25,8 +23,6 @@ import com.akacrud.controller.UserController;
 import com.akacrud.model.User;
 import com.akacrud.util.AlertDateDialog;
 import com.akacrud.util.CommonUtils;
-
-import java.sql.Timestamp;
 
 public class UserFormActivity extends AppCompatActivity {
 
