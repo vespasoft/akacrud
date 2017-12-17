@@ -1,13 +1,12 @@
 package com.akacrud.ui.activities;
 
-import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.view.ActionMode;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.View;
@@ -19,42 +18,43 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.akacrud.R;
 import com.akacrud.ui.fragments.SettingFragment;
 import com.akacrud.ui.fragments.UserFragment;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
 
-    private Context mContext;
-    private Toolbar toolbar;
-    private FrameLayout containerBody;
-    private RelativeLayout containerMain;
-    private boolean modeEdit = false;
-    private int current_fragment = 0;
+    @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.container_body) FrameLayout containerBody;
+    @BindView(R.id.drawer_layout) DrawerLayout drawer;
+    @BindView(R.id.nav_view) NavigationView navigationView;
+
     private Fragment fragment = null;
-    private SwipeRefreshLayout swipeRefreshLayout;
+    private int current_fragment = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        containerBody = (FrameLayout)findViewById(R.id.container_body);
+        ButterKnife.bind(this);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        setSupportActionBar(toolbar);
+
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         // Show the view users by default

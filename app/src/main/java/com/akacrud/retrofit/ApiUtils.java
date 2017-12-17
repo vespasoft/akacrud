@@ -12,7 +12,7 @@ public class ApiUtils {
 
     public static UserServices getAPIUserService() {
 
-        return RetrofitClient.getClient(BuildConfig.BASE_URL).create(UserServices.class);
+        return RetrofitClient.getClient(Constants.AKACRUD_API).create(UserServices.class);
     }
 
 }

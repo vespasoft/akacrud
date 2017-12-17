@@ -5,7 +5,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.FragmentTransaction;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,20 +22,21 @@ import com.akacrud.controller.UserController;
 import com.akacrud.model.User;
 import com.akacrud.util.AlertDateDialog;
 import com.akacrud.util.CommonUtils;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class UserFormActivity extends AppCompatActivity {
 
     private static String TAG = UserFormActivity.class.getSimpleName();
 
-    private boolean mode_update = false;
-
     private Activity mActivity;
-    private Context mContext;
-    private View mView;
-    private ProgressBar mProgressView;
-    private TextView textViewName;
-    private TextView textViewBirthDate;
+    @BindView(R.id.linearLayoutUser) View mView;
+    @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.progressBar) ProgressBar mProgressView;
+    @BindView(R.id.textViewName) TextView textViewName;
+    @BindView(R.id.textViewBirthDate) TextView textViewBirthDate;
 
+    private boolean mode_update = false;
     // Class Manager of services customer.
     private UserController userController;
 
@@ -47,21 +47,13 @@ public class UserFormActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_form);
+        ButterKnife.bind(this);
 
         mActivity = this;
-        mContext = this;
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(getResources().getDrawable(R.drawable.ic_back_arraw));
         getSupportActionBar().setTitle(R.string.title_activity_user_form_create);
-
-        mView = findViewById(R.id.linearLayoutUser);
-        mProgressView = (ProgressBar) findViewById(R.id.progressBar);
-
-        textViewName = (TextView) findViewById(R.id.textViewName);
-        textViewBirthDate = (TextView) findViewById(R.id.textViewBirthDate);
 
         textViewBirthDate.setOnClickListener(new View.OnClickListener() {
             @Override
