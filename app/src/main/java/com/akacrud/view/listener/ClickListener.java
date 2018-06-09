@@ -1,4 +1,4 @@
-package com.akacrud.ui.listener;
+package com.akacrud.view.listener;
 
 import android.view.View;
 

@@ -1,4 +1,4 @@
-package com.akacrud.ui.fragments;
+package com.akacrud.view.fragments;
 
 import android.content.Context;
 import android.net.Uri;

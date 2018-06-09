@@ -4,7 +4,7 @@
     android:id="@+id/mLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.akacrud.ui.activities.SplashActivity">
+    tools:context="com.akacrud.view.activities.SplashActivity">
 
     <TextView
         android:text="@string/app_name"

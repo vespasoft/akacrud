@@ -1,10 +1,9 @@
 package com.akacrud.async;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.AsyncTask;
-import com.akacrud.ui.activities.MainActivity;
-import com.akacrud.ui.activities.SplashActivity;
+
+import com.akacrud.view.activities.SplashActivity;
 
 /**
  * Created by luisvespa on 12/13/17.

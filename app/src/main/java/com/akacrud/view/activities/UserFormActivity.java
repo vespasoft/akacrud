@@ -1,10 +1,11 @@
-package com.akacrud.ui.activities;
+package com.akacrud.view.activities;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,14 +19,17 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.akacrud.R;
-import com.akacrud.controller.UserController;
-import com.akacrud.model.User;
-import com.akacrud.util.AlertDateDialog;
-import com.akacrud.util.CommonUtils;
+import com.akacrud.entity.api.client.UserClient;
+import com.akacrud.entity.model.User;
+import com.akacrud.interactor.UsersInteractor;
+import com.akacrud.presenter.UserFormPresenter;
+import com.akacrud.presenter.UsersPresenter;
+import com.akacrud.view.util.AlertDateDialog;
+import com.akacrud.view.util.CommonUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class UserFormActivity extends AppCompatActivity {
+public class UserFormActivity extends AppCompatActivity implements UserFormPresenter.View {
 
     private static String TAG = UserFormActivity.class.getSimpleName();
 
@@ -37,11 +41,8 @@ public class UserFormActivity extends AppCompatActivity {
     @BindView(R.id.textViewBirthDate) TextView textViewBirthDate;
 
     private boolean mode_update = false;
-    // Class Manager of services customer.
-    private UserController userController;
-
-    // Entity of the user
-    User user;
+    private UserFormPresenter userFormPresenter;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +56,9 @@ public class UserFormActivity extends AppCompatActivity {
         getSupportActionBar().setHomeAsUpIndicator(getResources().getDrawable(R.drawable.ic_back_arraw));
         getSupportActionBar().setTitle(R.string.title_activity_user_form_create);
 
+        userFormPresenter = new UserFormPresenter(new UsersInteractor(new UserClient()));
+        userFormPresenter.setView(this);
+
         textViewBirthDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -63,9 +67,6 @@ public class UserFormActivity extends AppCompatActivity {
                 d.show(ft, "DatePicker");
             }
         });
-
-        // Create a new instance of UserController class for manage user data
-        userController = new UserController(mActivity);
 
         // get the intent object
         Intent intent = getIntent();
@@ -80,7 +81,6 @@ public class UserFormActivity extends AppCompatActivity {
     }
 
     private void attemptSave() {
-
         String name = textViewName.getText().toString();
         String birthdate = textViewBirthDate.getText().toString();
 
@@ -97,8 +97,6 @@ public class UserFormActivity extends AppCompatActivity {
         }
 
         if (cancel) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
             CommonUtils.showSnackBar(mActivity, mView, mMessage);
         } else {
             if (!mode_update) {
@@ -108,9 +106,9 @@ public class UserFormActivity extends AppCompatActivity {
             user.setBirthdate(birthdate);
 
             if (mode_update)
-                userController.update(this, mView, user);
+                userFormPresenter.update(this, user);
             else
-                userController.create(this, mView, user);
+                userFormPresenter.create(this, user);
         }
 
     }
@@ -184,4 +182,18 @@ public class UserFormActivity extends AppCompatActivity {
         return (super.onOptionsItemSelected(item));
     }
 
+    @Override
+    public Context context() {
+        return mActivity;
+    }
+
+    @Override
+    public void showLoading(boolean show) {
+        mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+    }
+
+    @Override
+    public void showSnackBarMessage(String message) {
+        CommonUtils.showSnackBar(mActivity, mView, message);
+    }
 }

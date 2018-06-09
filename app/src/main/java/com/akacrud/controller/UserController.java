@@ -5,17 +5,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.view.ActionMode;
 import android.util.Log;
-import android.view.Display;
 import android.view.View;
 import android.widget.Toast;
 
 import com.akacrud.R;
-import com.akacrud.model.User;
-import com.akacrud.retrofit.ApiUtils;
-import com.akacrud.retrofit.UserServices;
-import com.akacrud.ui.activities.UserFormActivity;
-import com.akacrud.ui.fragments.UserFragment;
-import com.akacrud.util.CommonUtils;
+import com.akacrud.entity.model.User;
+import com.akacrud.entity.api.retrofit.ApiUtils;
+import com.akacrud.entity.api.retrofit.UserRetrofitServices;
+import com.akacrud.view.activities.UserFormActivity;
+import com.akacrud.view.fragments.UserFragment;
+import com.akacrud.view.util.CommonUtils;
 
 import org.json.JSONObject;
 
@@ -37,7 +36,7 @@ public class UserController {
 
     Context mContext;
     Activity mActivity;
-    UserServices mAPIUserService;
+    UserRetrofitServices mAPIUserService;
     List<User> users;
 
     public UserController(Activity activity) {
@@ -50,7 +49,7 @@ public class UserController {
         this.users = users;
     }
 
-    public void getAll(final UserFragment fragment, final View mView) {
+    /*public void getAll(final UserFragment fragment, final View mView) {
         users = new LinkedList<>();
         mAPIUserService = ApiUtils.getAPIUserService();
         mAPIUserService.getAll().enqueue(new Callback<List<User>>() {
@@ -154,10 +153,10 @@ public class UserController {
                 CommonUtils.showSnackBar(mActivity, mView, mActivity.getResources().getString(R.string.message_error_internet));
             }
         });
-    }
+    }*/
 
 
-    public void remove (final UserFragment fragment, final View mView, final ActionMode mode, int id) {
+    /*public void remove (final UserFragment fragment, final View mView, final ActionMode mode, int id) {
         fragment.showProgress(true);
         mAPIUserService = ApiUtils.getAPIUserService();
         mAPIUserService.remove(id).enqueue(new Callback<Void>() {
@@ -189,6 +188,6 @@ public class UserController {
             }
         });
 
-    }
+    }*/
 
 }

@@ -1,4 +1,4 @@
-package com.akacrud.ui.helper;
+package com.akacrud.view.helper;
 
 import android.content.Context;
 import android.content.res.TypedArray;

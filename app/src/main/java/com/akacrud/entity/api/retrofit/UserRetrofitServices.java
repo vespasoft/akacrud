@@ -1,9 +1,12 @@
-package com.akacrud.retrofit;
+package com.akacrud.entity.api.retrofit;
 
-import com.akacrud.model.User;
+import com.akacrud.entity.model.User;
 
 import java.util.List;
 
+import io.reactivex.Completable;
+import io.reactivex.Observable;
+import io.reactivex.Single;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -15,23 +18,23 @@ import retrofit2.http.Path;
  * Created by luisvespa on 12/13/17.
  */
 
-public interface UserServices {
+public interface UserRetrofitServices {
 
     @GET("/api/user/getall")
-    Call<List<User>> getAll();
+    Single<List<User>> getUsers();
 
     @GET("/api/user/get/{id}")
-    Call<User> getById(@Path("id") int id);
+    Single<User> getById(@Path("id") int id);
 
     @Headers("Content-Type: application/json")
     @POST("/api/user/create")
-    Call<User> create(@Body User body);
+    Completable create(@Body User body);
 
     @Headers("Content-Type: application/json")
     @POST("/api/user/update")
-    Call<User> update(@Body User body);
+    Single<User> update(@Body User body);
 
     @GET("/api/user/remove/{id}")
-    Call<Void> remove(@Path("id") int id);
+    Completable remove(@Path("id") int id);
 
 }

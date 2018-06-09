@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
         <activity
-            android:name=".ui.activities.SplashActivity"
+            android:name=".view.activities.SplashActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -24,11 +24,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.activities.MainActivity"
+            android:name=".view.activities.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
-            android:name=".ui.activities.UserFormActivity"
+            android:name=".view.activities.UserFormActivity"
             android:label="@string/title_activity_user_form_create"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>

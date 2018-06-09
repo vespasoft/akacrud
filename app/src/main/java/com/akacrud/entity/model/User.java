@@ -1,10 +1,9 @@
-package com.akacrud.model;
+package com.akacrud.entity.model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 
 /**
  * Created by luisvespa on 12/13/17.

@@ -3,7 +3,7 @@ package com.akacrud.tests;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import com.akacrud.R;
-import com.akacrud.ui.activities.UserFormActivity;
+import com.akacrud.view.activities.UserFormActivity;
 
 import org.junit.Rule;
 import org.junit.Test;

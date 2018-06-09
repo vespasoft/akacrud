@@ -1,12 +1,9 @@
-package com.akacrud.ui.activities;
+package com.akacrud.view.activities;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.View;
@@ -19,13 +16,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.akacrud.R;
-import com.akacrud.ui.fragments.SettingFragment;
-import com.akacrud.ui.fragments.UserFragment;
+import com.akacrud.view.fragments.SettingFragment;
+import com.akacrud.view.fragments.UserFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

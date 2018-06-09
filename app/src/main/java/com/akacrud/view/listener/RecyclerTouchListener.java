@@ -1,4 +1,4 @@
-package com.akacrud.ui.listener;
+package com.akacrud.view.listener;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

@@ -1,4 +1,4 @@
-package com.akacrud.retrofit;
+package com.akacrud.entity.api;
 
 /**
  * Created by luisvespa on 12/17/17.

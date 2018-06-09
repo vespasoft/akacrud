@@ -1,4 +1,4 @@
-package com.akacrud.util;
+package com.akacrud.view.util;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;

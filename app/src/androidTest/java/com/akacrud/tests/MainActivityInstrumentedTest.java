@@ -4,7 +4,7 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import com.akacrud.R;
-import com.akacrud.ui.activities.MainActivity;
+import com.akacrud.view.activities.MainActivity;
 
 import org.junit.Rule;
 import org.junit.Test;
