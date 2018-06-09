@@ -27,9 +27,9 @@ public class UserRegisterPresenter extends Presenter<UserRegisterContracts.View>
     private UsersInteractor interactor;
     private UserRegisterContracts.Router router;
 
-    public UserRegisterPresenter(UsersInteractor interactor) {
+    public UserRegisterPresenter(UsersInteractor interactor, UserRegisterRouter userRegisterRouter) {
         this.interactor = interactor;
-        this.router = new UserRegisterRouter((Activity) getView());
+        this.router = userRegisterRouter;
     }
 
     @Override
@@ -51,9 +51,7 @@ public class UserRegisterPresenter extends Presenter<UserRegisterContracts.View>
                 @Override
                 public void onComplete() {
                     // The transaction is completeds
-                    Intent data = new Intent();
-                    activity.setResult(RESULT_OK, data);
-                    activity.finish();
+                    goToBackWithResult();
                 }
 
                 @Override
@@ -78,8 +76,7 @@ public class UserRegisterPresenter extends Presenter<UserRegisterContracts.View>
                 .subscribeWith(new DisposableSingleObserver<User>() {
                     public void onSuccess(User user) {
                         // The transaction is successful
-                        Intent data = new Intent();
-                        goToBackWithResult(data);
+                        goToBackWithResult();
                     }
 
                     @Override
@@ -100,8 +97,8 @@ public class UserRegisterPresenter extends Presenter<UserRegisterContracts.View>
     }
 
     @Override
-    public void goToBackWithResult(Intent data) {
-        router.goToBackWithResult(data);
+    public void goToBackWithResult() {
+        router.goToBackWithResult();
     }
 
 }

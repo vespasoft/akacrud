@@ -33,7 +33,8 @@ public class UserRegisterRouter implements UserRegisterContracts.Router {
     }
 
     @Override
-    public void goToBackWithResult(Intent data) {
+    public void goToBackWithResult() {
+        Intent data = new Intent();
         activity.setResult(RESULT_OK, data);
         activity.finish();
     }

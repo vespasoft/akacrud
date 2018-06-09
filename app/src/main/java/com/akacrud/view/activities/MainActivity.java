@@ -71,7 +71,6 @@ public class MainActivity extends AppCompatActivity
         Toolbar tb = (Toolbar) findViewById(R.id.toolbar);
         tb.inflateMenu(R.menu.main);
 
-
         tb.setOnMenuItemClickListener(
                 new Toolbar.OnMenuItemClickListener() {
                     @Override

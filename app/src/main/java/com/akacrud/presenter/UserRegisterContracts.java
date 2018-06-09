@@ -28,7 +28,7 @@ public class UserRegisterContracts {
 
         void goToBackScreen();
 
-        void goToBackWithResult(Intent data);
+        void goToBackWithResult();
     }
 
     public interface Router {
@@ -36,6 +36,6 @@ public class UserRegisterContracts {
 
         void goToBackScreen();
 
-        void goToBackWithResult(Intent data);
+        void goToBackWithResult();
     }
 }

@@ -24,6 +24,7 @@ import com.akacrud.entity.model.User;
 import com.akacrud.interactor.UsersInteractor;
 import com.akacrud.presenter.UsersContracts;
 import com.akacrud.presenter.UsersPresenter;
+import com.akacrud.router.UsersRouter;
 import com.akacrud.view.activities.MainActivity;
 import com.akacrud.view.adapter.RecyclerAdapterUser;
 import com.akacrud.view.listener.ClickListener;
@@ -71,7 +72,7 @@ public class UserFragment extends Fragment implements UsersContracts.View  {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        usersPresenter = new UsersPresenter(new UsersInteractor(new UserClient()));
+        usersPresenter = new UsersPresenter(new UsersInteractor(new UserClient()), new UsersRouter(getActivity()));
         usersPresenter.setView(this);
     }
 

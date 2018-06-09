@@ -25,9 +25,9 @@ public class UsersPresenter extends Presenter<UsersContracts.View> implements Us
     private UsersInteractor interactor;
     private UsersContracts.Router router;
 
-    public UsersPresenter(UsersInteractor interactor) {
+    public UsersPresenter(UsersInteractor interactor, UsersRouter usersRouter) {
         this.interactor = interactor;
-        this.router = new UsersRouter((Activity) getView());
+        this.router = usersRouter;
     }
 
     @Override

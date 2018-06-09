@@ -24,6 +24,7 @@ import com.akacrud.entity.model.User;
 import com.akacrud.interactor.UsersInteractor;
 import com.akacrud.presenter.UserRegisterContracts;
 import com.akacrud.presenter.UserRegisterPresenter;
+import com.akacrud.router.UserRegisterRouter;
 import com.akacrud.view.util.AlertDateDialog;
 import com.akacrud.view.util.CommonUtils;
 import butterknife.BindView;
@@ -56,7 +57,7 @@ public class UserRegisterActivity extends AppCompatActivity implements UserRegis
         getSupportActionBar().setHomeAsUpIndicator(getResources().getDrawable(R.drawable.ic_back_arraw));
         getSupportActionBar().setTitle(R.string.title_activity_user_form_create);
 
-        userRegisterPresenter = new UserRegisterPresenter(new UsersInteractor(new UserClient()));
+        userRegisterPresenter = new UserRegisterPresenter(new UsersInteractor(new UserClient()),  new UserRegisterRouter(this) );
         userRegisterPresenter.setView(this);
 
         textViewBirthDate.setOnClickListener(new View.OnClickListener() {
