@@ -275,11 +275,6 @@ public class UserFragment extends Fragment implements UsersPresenter.View  {
     }
 
     @Override
-    public void showSnackBarMessage(String message) {
-        CommonUtils.showSnackBar(mActivity, mView, message);
-    }
-
-    @Override
     public void renderUsers(List<User> users) {
         try {
             this.users = users;
