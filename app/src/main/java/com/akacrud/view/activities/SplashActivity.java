@@ -10,7 +10,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.akacrud.R;
-import com.akacrud.async.AsyncTaskSplash;
+import com.akacrud.view.async.AsyncTaskSplash;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

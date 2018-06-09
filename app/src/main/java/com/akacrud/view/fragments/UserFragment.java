@@ -22,13 +22,12 @@ import com.akacrud.R;
 import com.akacrud.entity.api.client.UserClient;
 import com.akacrud.entity.model.User;
 import com.akacrud.interactor.UsersInteractor;
+import com.akacrud.presenter.UsersContracts;
 import com.akacrud.presenter.UsersPresenter;
 import com.akacrud.view.activities.MainActivity;
-import com.akacrud.view.activities.UserFormActivity;
 import com.akacrud.view.adapter.RecyclerAdapterUser;
 import com.akacrud.view.listener.ClickListener;
 import com.akacrud.view.listener.RecyclerTouchListener;
-import com.akacrud.view.util.CommonUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +41,7 @@ import static android.app.Activity.RESULT_OK;
  * A simple {@link Fragment} subclass.
  * create an instance of this fragment.
  */
-public class UserFragment extends Fragment implements UsersPresenter.View  {
+public class UserFragment extends Fragment implements UsersContracts.View  {
     private static String TAG = UserFragment.class.getSimpleName();
 
     private Context mContext;
@@ -90,8 +89,7 @@ public class UserFragment extends Fragment implements UsersPresenter.View  {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mActivity, UserFormActivity.class);
-                startActivityForResult(intent, request_CreateCode);
+                usersPresenter.goToUserRegisterScreen();
             }
         });
 
@@ -103,10 +101,7 @@ public class UserFragment extends Fragment implements UsersPresenter.View  {
     public void editCurrentUser(ActionMode mode) {
         try {
             User userSelected = mAdapter.getSelectedItem();
-            Intent intent = new Intent(mActivity, UserFormActivity.class);
-            intent.putExtra("mode_update", true);
-            intent.putExtra("user", userSelected);
-            startActivityForResult(intent, request_UpdateCode);
+            usersPresenter.goToEditCurrentUserScreen(userSelected);
         } catch (Exception ex) {
             Log.d(TAG, "Error to delete a user "+ ex.toString());
         }
@@ -115,7 +110,6 @@ public class UserFragment extends Fragment implements UsersPresenter.View  {
     public void deleteCurrentUser(ActionMode mode) {
         try {
             User userSelected = mAdapter.getSelectedItem();
-            Log.d(TAG, "User to delete " + userSelected.getName());
             usersPresenter.remove(userSelected.getId(), mode);
         } catch (Exception ex) {
             Log.d(TAG, "Error to delete a user "+ ex.toString());
@@ -123,48 +117,14 @@ public class UserFragment extends Fragment implements UsersPresenter.View  {
 
     }
 
-    /**
-     * Shows the user data in the RecyclerView
-     */
-    public void setupUsers(List<User> data) {
-        try {
-            this.users = data;
-            LinearLayoutManager mLayoutManager = new LinearLayoutManager(mActivity);
-            mRecyclerView.setLayoutManager(mLayoutManager);
-            mAdapter = new RecyclerAdapterUser(users);
-            mRecyclerView.setAdapter(mAdapter);
-            mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(mContext, mRecyclerView, new ClickListener() {
-                @Override
-                public void onClick(View view, int position) {
-                    Toast.makeText(mContext, "Has presionado el usuario " + users.get(position).getName() , Toast.LENGTH_LONG).show();
-                }
-
-                @Override
-                public void onLongClick(View view, int position) {
-                    try {
-                        Toast.makeText(mContext, "Has seleccionado al usuario " + users.get(position).getName() , Toast.LENGTH_LONG).show();
-                        // long press is performed, enable action mode
-                        enableActionMode(position);
-                    } catch (Exception ex){
-                        Log.e(TAG, "error in onLongClick. " + ex.toString());
-                    }
-                }
-            }));
-
-            showProgress(false);
-        } catch (Exception ex) {
-            Log.e(TAG, "Error in setupusers method. " + ex.toString());
-        }
-    }
-
     public void setFilter(String query) {
         mAdapter.setFilter(filter(users, query));
     }
 
     /*
-    This function goes through the current arrangement of users and compares the matches
-    with the query inserted by the user. Matches are added in a
-    new array called userListFiltered.
+        This function goes through the current arrangement of users and compares the matches
+        with the query inserted by the user. Matches are added in a
+        new array called userListFiltered.
     */
     private List<User> filter (List<User> userList, String mQuery) {
         List<User> userListFiltered = new ArrayList<>();

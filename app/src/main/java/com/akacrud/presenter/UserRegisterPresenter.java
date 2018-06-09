@@ -1,18 +1,15 @@
 package com.akacrud.presenter;
 
+import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.view.ActionMode;
-import android.util.Log;
 import android.widget.Toast;
-
 import com.akacrud.entity.model.User;
 import com.akacrud.interactor.UsersInteractor;
-import com.akacrud.view.activities.UserFormActivity;
+import com.akacrud.router.UserRegisterRouter;
+import com.akacrud.view.activities.UserRegisterActivity;
 import com.akacrud.view.util.CommonUtils;
 
 import org.json.JSONObject;
-
-import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableCompletableObserver;
@@ -20,21 +17,30 @@ import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 
 import static android.app.Activity.RESULT_OK;
-import static android.content.ContentValues.TAG;
 
 /**
  * Created by luisvespa on 12/17/17.
  */
 
-public class UserFormPresenter extends Presenter<UserFormPresenter.View> {
+public class UserRegisterPresenter extends Presenter<UserRegisterContracts.View> implements UserRegisterContracts.Presenter {
 
     private UsersInteractor interactor;
+    private UserRegisterContracts.Router router;
 
-    public UserFormPresenter(UsersInteractor interactor) {
+    public UserRegisterPresenter(UsersInteractor interactor) {
         this.interactor = interactor;
+        this.router = new UserRegisterRouter((Activity) getView());
     }
 
-    public void create(final UserFormActivity activity, User user) {
+    @Override
+    public void onDestroy() {
+        this.interactor.unRegister();
+        this.interactor = null;
+        this.router.unRegister();
+        this.router = null;
+    }
+
+    public void create(final UserRegisterActivity activity, User user) {
         getView().showLoading(true);
         CommonUtils.hideKeyBoard(activity);
 
@@ -62,7 +68,7 @@ public class UserFormPresenter extends Presenter<UserFormPresenter.View> {
             });
     }
 
-    public void update(final UserFormActivity activity, User user) {
+    public void update(final UserRegisterActivity activity, User user) {
         getView().showLoading(true);
         CommonUtils.hideKeyBoard(activity);
 
@@ -73,8 +79,7 @@ public class UserFormPresenter extends Presenter<UserFormPresenter.View> {
                     public void onSuccess(User user) {
                         // The transaction is successful
                         Intent data = new Intent();
-                        activity.setResult(RESULT_OK, data);
-                        activity.finish();
+                        goToBackWithResult(data);
                     }
 
                     @Override
@@ -89,11 +94,14 @@ public class UserFormPresenter extends Presenter<UserFormPresenter.View> {
                 });
     }
 
-    public interface View extends Presenter.View {
-
-        void showLoading(boolean show);
-
-        void showSnackBarMessage(String message);
-
+    @Override
+    public void goToBackScreen() {
+        router.goToBackScreen();
     }
+
+    @Override
+    public void goToBackWithResult(Intent data) {
+        router.goToBackWithResult(data);
+    }
+
 }

@@ -28,7 +28,7 @@
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
-            android:name=".view.activities.UserFormActivity"
+            android:name=".view.activities.UserRegisterActivity"
             android:label="@string/title_activity_user_form_create"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>

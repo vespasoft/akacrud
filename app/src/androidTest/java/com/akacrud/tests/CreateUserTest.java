@@ -3,7 +3,7 @@ package com.akacrud.tests;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import com.akacrud.R;
-import com.akacrud.view.activities.UserFormActivity;
+import com.akacrud.view.activities.UserRegisterActivity;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -23,8 +23,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 public class CreateUserTest {
 
     @Rule
-    public ActivityTestRule<UserFormActivity> mActivityRule =
-            new ActivityTestRule<>(UserFormActivity.class);
+    public ActivityTestRule<UserRegisterActivity> mActivityRule =
+            new ActivityTestRule<>(UserRegisterActivity.class);
 
     @Test
     public void clickAccept_opensCreateUserScreen() {

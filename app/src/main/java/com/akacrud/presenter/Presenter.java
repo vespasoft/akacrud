@@ -1,9 +1,8 @@
+package com.akacrud.presenter;
 
 /**
  * Created by luisvespa on 12/17/17.
  */
-
-package com.akacrud.presenter;
 
 import android.content.Context;
 

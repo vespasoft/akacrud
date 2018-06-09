@@ -22,16 +22,16 @@ import com.akacrud.R;
 import com.akacrud.entity.api.client.UserClient;
 import com.akacrud.entity.model.User;
 import com.akacrud.interactor.UsersInteractor;
-import com.akacrud.presenter.UserFormPresenter;
-import com.akacrud.presenter.UsersPresenter;
+import com.akacrud.presenter.UserRegisterContracts;
+import com.akacrud.presenter.UserRegisterPresenter;
 import com.akacrud.view.util.AlertDateDialog;
 import com.akacrud.view.util.CommonUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class UserFormActivity extends AppCompatActivity implements UserFormPresenter.View {
+public class UserRegisterActivity extends AppCompatActivity implements UserRegisterContracts.View {
 
-    private static String TAG = UserFormActivity.class.getSimpleName();
+    private static String TAG = UserRegisterActivity.class.getSimpleName();
 
     private Activity mActivity;
     @BindView(R.id.linearLayoutUser) View mView;
@@ -41,7 +41,7 @@ public class UserFormActivity extends AppCompatActivity implements UserFormPrese
     @BindView(R.id.textViewBirthDate) TextView textViewBirthDate;
 
     private boolean mode_update = false;
-    private UserFormPresenter userFormPresenter;
+    private UserRegisterPresenter userRegisterPresenter;
     private User user;
 
     @Override
@@ -56,8 +56,8 @@ public class UserFormActivity extends AppCompatActivity implements UserFormPrese
         getSupportActionBar().setHomeAsUpIndicator(getResources().getDrawable(R.drawable.ic_back_arraw));
         getSupportActionBar().setTitle(R.string.title_activity_user_form_create);
 
-        userFormPresenter = new UserFormPresenter(new UsersInteractor(new UserClient()));
-        userFormPresenter.setView(this);
+        userRegisterPresenter = new UserRegisterPresenter(new UsersInteractor(new UserClient()));
+        userRegisterPresenter.setView(this);
 
         textViewBirthDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,9 +106,9 @@ public class UserFormActivity extends AppCompatActivity implements UserFormPrese
             user.setBirthdate(birthdate);
 
             if (mode_update)
-                userFormPresenter.update(this, user);
+                userRegisterPresenter.update(this, user);
             else
-                userFormPresenter.create(this, user);
+                userRegisterPresenter.create(this, user);
         }
 
     }
@@ -175,8 +175,7 @@ public class UserFormActivity extends AppCompatActivity implements UserFormPrese
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                finish();
-                overridePendingTransition(R.anim.activity_back_in, R.anim.activity_back_out);
+                userRegisterPresenter.goToBackScreen();
                 return true;
         }
         return (super.onOptionsItemSelected(item));
@@ -186,6 +185,7 @@ public class UserFormActivity extends AppCompatActivity implements UserFormPrese
     public Context context() {
         return mActivity;
     }
+
 
     @Override
     public void showLoading(boolean show) {

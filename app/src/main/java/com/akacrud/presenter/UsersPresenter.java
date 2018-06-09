@@ -1,9 +1,13 @@
 package com.akacrud.presenter;
 
+import android.app.Activity;
 import android.support.v7.view.ActionMode;
 import android.util.Log;
+
 import com.akacrud.entity.model.User;
 import com.akacrud.interactor.UsersInteractor;
+import com.akacrud.router.UsersRouter;
+
 import java.util.List;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableCompletableObserver;
@@ -16,14 +20,25 @@ import static android.content.ContentValues.TAG;
  * Created by luisvespa on 12/17/17.
  */
 
-public class UsersPresenter extends Presenter<UsersPresenter.View> {
+public class UsersPresenter extends Presenter<UsersContracts.View> implements UsersContracts.Presenter {
 
     private UsersInteractor interactor;
+    private UsersContracts.Router router;
 
     public UsersPresenter(UsersInteractor interactor) {
         this.interactor = interactor;
+        this.router = new UsersRouter((Activity) getView());
     }
 
+    @Override
+    public void onDestroy() {
+        this.interactor.unRegister();
+        this.interactor = null;
+        this.router.unRegister();
+        this.router = null;
+    }
+
+    @Override
     public void getAllUsers() {
         getView().showLoading(true);
 
@@ -52,6 +67,7 @@ public class UsersPresenter extends Presenter<UsersPresenter.View> {
 
     }
 
+    @Override
     public void remove(int id, final ActionMode mode) {
         getView().showLoading(true);
         interactor.remove(id)
@@ -74,15 +90,14 @@ public class UsersPresenter extends Presenter<UsersPresenter.View> {
 
     }
 
-
-    public interface View extends Presenter.View {
-
-        void showLoading(boolean show);
-
-        void showUsersNotFoundMessage(boolean show);
-
-        void showConnectionErrorMessage(boolean show);
-
-        void renderUsers(List<User> users);
+    @Override
+    public void goToUserRegisterScreen() {
+        router.presentUserRegisterScreen();
     }
+
+    @Override
+    public void goToEditCurrentUserScreen(User user) {
+        router.editCurrentUserScreen(user);
+    }
+
 }
